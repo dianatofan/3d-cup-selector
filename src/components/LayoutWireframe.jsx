@@ -71,23 +71,27 @@ export default function LayoutWireframe() {
           <div style={{ fontFamily: font.mono, fontSize: 10, color: color.muted, marginBottom: 5, letterSpacing: '.06em' }}>MOBILE / TABLET · &lt;1200 · 1 col</div>
           <div style={{ border: `1px solid ${FAINT}`, borderRadius: 8, padding: 8, background: 'rgba(255,255,255,.35)', display: 'flex', flexDirection: 'column', gap: 6 }}>
             <HeaderStrip icon />
-            <div style={{ ...tint, position: 'relative' }}>
-              <span style={{ position: 'absolute', top: 6, right: 6, fontFamily: font.mono, fontSize: 7.5, letterSpacing: '.08em', textTransform: 'uppercase', color: color.greenDark, border: `1px solid ${color.green}`, borderRadius: 999, padding: '1px 5px' }}>sticky</span>
-              <Lbl n="1" r="3D cup" />
+            <div style={tint}>
+              <div style={lbl}>
+                <span><span style={nStyle}>1</span> 3D cup</span>
+                <span style={{ fontFamily: font.mono, fontSize: 7.5, letterSpacing: '.08em', textTransform: 'uppercase', color: color.greenDark, border: `1px solid ${color.green}`, borderRadius: 999, padding: '1px 5px', flex: 'none' }}>sticky</span>
+              </div>
               <Cup h={52} />
+              <div style={cap}>RECOMMENDED</div>
             </div>
             <div style={box}>
-              <Lbl n="2" r="options" />
+              <Lbl n="2" r="params" />
               <div style={{ display: 'flex', gap: 4 }}><Chip on /><Chip /></div>
+              <div style={{ display: 'flex', gap: 4 }}><Chip /><Chip on /></div>
               <Tape />
             </div>
             <div style={box}>
-              <Lbl n="3" r="summary" />
-              <Row />
-              <span style={{ height: 16, borderRadius: 999, background: color.green, marginTop: 2 }} />
+              <Lbl n="3" r="receipt" />
+              <Row /><Row />
+              <span style={{ height: 16, borderRadius: 999, background: color.ink, marginTop: 2 }} />
             </div>
             <div style={solid}>
-              <Lbl n="4" r="trust stats" />
+              <Lbl n="4" r="stats" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 4 }}>
                 {[0, 1, 2].map((i) => <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}><span style={{ height: 9, width: '60%', borderRadius: 2, background: color.green }} /><Bar w="70%" /></div>)}
               </div>
