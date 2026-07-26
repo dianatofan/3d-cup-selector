@@ -39,9 +39,12 @@ export default function Receipt({ order }) {
   useEffect(() => {
     if (prevStep.current !== step) { printCount.current += 1; prevStep.current = step; force((n) => n + 1); }
   }, [step]);
-  const paperAnim = printCount.current === 0
-    ? 'lp-printIn 1.15s steps(26, end) both'
-    : `lp-print${printCount.current % 2 ? 'A' : 'B'} 0.6s steps(15, end) both`;
+  const isFirst = printCount.current === 0;
+  const stepAnim = isFirst ? '1.5s steps(30, end) both' : '0.7s steps(16, end) both';
+  const paperAnim = isFirst
+    ? `lp-printIn ${stepAnim}`
+    : `lp-print${printCount.current % 2 ? 'A' : 'B'} ${stepAnim}`;
+  const feedAnim = `lp-feed ${stepAnim}`;
 
   const pickLogo = (e) => {
     const f = e.target.files && e.target.files[0];
@@ -59,6 +62,8 @@ export default function Receipt({ order }) {
       </div>
       {/* paper clip window — reveals the sheet top-to-bottom as it feeds out from behind the slot */}
       <div style={{ overflow: 'hidden', position: 'relative', zIndex: 3, margin: '-13px -24px 0', padding: '0 24px 48px', animation: paperAnim, willChange: 'clip-path' }}>
+        {/* leading edge of the paper, advancing down as it feeds out of the slot */}
+        <div key={printCount.current} aria-hidden="true" style={{ position: 'absolute', left: 4, right: 4, top: 0, height: 18, zIndex: 4, pointerEvents: 'none', background: 'linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,0))', borderTop: '1px solid rgba(0,0,0,.28)', animation: feedAnim }} />
         <div
           style={{
             ...MONO, fontSize: text.base, color: color.ink, lineHeight: 1.9,

@@ -7,10 +7,12 @@ input { outline: none; }
 @keyframes lp-tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes lp-popA { 0% { transform: scale(1.16); } 100% { transform: scale(1); } }
 @keyframes lp-popB { 0% { transform: scale(1.16); } 100% { transform: scale(1); } }
-/* Paper feeding out of the slot: revealed top-to-bottom in small mechanical steps. */
-@keyframes lp-printIn { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
-@keyframes lp-printA { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
-@keyframes lp-printB { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+/* Paper feeding out of the slot: revealed top-to-bottom with a slight droop. */
+@keyframes lp-printIn { from { clip-path: inset(0 0 100% 0); transform: translateY(-6px); } to { clip-path: inset(0 0 0 0); transform: translateY(0); } }
+@keyframes lp-printA { from { clip-path: inset(0 0 100% 0); transform: translateY(-6px); } to { clip-path: inset(0 0 0 0); transform: translateY(0); } }
+@keyframes lp-printB { from { clip-path: inset(0 0 100% 0); transform: translateY(-6px); } to { clip-path: inset(0 0 0 0); transform: translateY(0); } }
+/* The leading edge of the paper advancing down as it feeds out. */
+@keyframes lp-feed { 0% { top: 0; opacity: .85; } 85% { opacity: .85; } 100% { top: 100%; opacity: 0; } }
 @keyframes lp-scratchA { 0% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes lp-scratchB { 0% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes lp-writeA { 0% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0 0 0 0); } }
