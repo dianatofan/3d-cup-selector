@@ -40,8 +40,8 @@ export default function Receipt({ order }) {
     if (prevStep.current !== step) { printCount.current += 1; prevStep.current = step; force((n) => n + 1); }
   }, [step]);
   const paperAnim = printCount.current === 0
-    ? 'lp-printIn 2.8s steps(17, end) both'
-    : `lp-print${printCount.current % 2 ? 'A' : 'B'} 1.5s steps(13, end) both`;
+    ? 'lp-printIn 1.15s steps(26, end) both'
+    : `lp-print${printCount.current % 2 ? 'A' : 'B'} 0.6s steps(15, end) both`;
 
   const pickLogo = (e) => {
     const f = e.target.files && e.target.files[0];
@@ -54,16 +54,16 @@ export default function Receipt({ order }) {
   return (
     <div style={{ maxWidth: 420, width: '100%', margin: '0 auto', boxSizing: 'border-box', alignSelf: 'flex-start', paddingTop: 14 }}>
       {/* printer slot */}
-      <div style={{ position: 'relative', zIndex: 2, margin: '0 -14px', background: 'linear-gradient(180deg,#2e2e2e,#181818 70%,#101010)', borderRadius: '14px 14px 7px 7px', padding: '11px 18px 12px' }}>
+      <div style={{ position: 'relative', zIndex: 5, margin: '0 -14px', background: 'linear-gradient(180deg,#2e2e2e,#181818 70%,#101010)', borderRadius: '14px 14px 7px 7px', padding: '11px 18px 12px' }}>
         <div style={{ height: 5, borderRadius: 3, background: '#000', boxShadow: 'inset 0 2px 4px rgba(0,0,0,.9)' }} />
       </div>
-      {/* paper clip window */}
-      <div style={{ overflow: 'hidden', position: 'relative', zIndex: 3, margin: '-13px -24px 0', padding: '0 24px 48px' }}>
+      {/* paper clip window — reveals the sheet top-to-bottom as it feeds out from behind the slot */}
+      <div style={{ overflow: 'hidden', position: 'relative', zIndex: 3, margin: '-13px -24px 0', padding: '0 24px 48px', animation: paperAnim, willChange: 'clip-path' }}>
         <div
           style={{
             ...MONO, fontSize: text.base, color: color.ink, lineHeight: 1.9,
             background: 'repeating-linear-gradient(0deg,rgba(19,19,19,.035) 0,rgba(19,19,19,.035) 1px,transparent 1px,transparent 4px),repeating-linear-gradient(90deg,rgba(19,19,19,.015) 0,rgba(19,19,19,.015) 2px,transparent 2px,transparent 7px),linear-gradient(175deg,#fdfcf6,#f0eee1)',
-            margin: '0 4px', animation: paperAnim, transformOrigin: 'top center', borderRadius: '0 0 2px 2px',
+            margin: '0 4px', borderRadius: '0 0 2px 2px',
             padding: '26px 26px 24px',
             boxShadow: '0 26px 54px rgba(0,0,0,.35),0 6px 14px rgba(0,0,0,.22),inset 0 14px 12px -12px rgba(0,0,0,.28)',
             clipPath: 'polygon(0 0,100% 0,100% calc(100% - 8px),96% 100%,92% calc(100% - 8px),88% 100%,84% calc(100% - 8px),80% 100%,76% calc(100% - 8px),72% 100%,68% calc(100% - 8px),64% 100%,60% calc(100% - 8px),56% 100%,52% calc(100% - 8px),48% 100%,44% calc(100% - 8px),40% 100%,36% calc(100% - 8px),32% 100%,28% calc(100% - 8px),24% 100%,20% calc(100% - 8px),16% 100%,12% calc(100% - 8px),8% 100%,4% calc(100% - 8px),0 100%)',

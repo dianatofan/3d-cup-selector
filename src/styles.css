@@ -7,9 +7,10 @@ input { outline: none; }
 @keyframes lp-tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes lp-popA { 0% { transform: scale(1.16); } 100% { transform: scale(1); } }
 @keyframes lp-popB { 0% { transform: scale(1.16); } 100% { transform: scale(1); } }
-@keyframes lp-printIn { 0% { transform: translateY(-97%) rotate(0deg); } 100% { transform: translateY(0) rotate(-0.7deg); } }
-@keyframes lp-printA { 0% { transform: translateY(-97%) rotate(0deg); } 100% { transform: translateY(0) rotate(-0.7deg); } }
-@keyframes lp-printB { 0% { transform: translateY(-97%) rotate(0deg); } 100% { transform: translateY(0) rotate(-0.7deg); } }
+/* Paper feeding out of the slot: revealed top-to-bottom in small mechanical steps. */
+@keyframes lp-printIn { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes lp-printA { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes lp-printB { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes lp-scratchA { 0% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes lp-scratchB { 0% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes lp-writeA { 0% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0 0 0 0); } }
