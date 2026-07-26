@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { color, font, text } from '../theme.js';
 
 const REPO = 'https://github.com/dianatofan/3d-cup-selector';
@@ -114,7 +114,6 @@ export default function AboutModal({ onClose }) {
   const [typed, setTyped] = useState(0);
   const done = typed >= total;
   const chunk = Math.max(2, Math.round(total / 480)); // ~8s total regardless of length
-  const scRef = useRef(null);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -122,11 +121,6 @@ export default function AboutModal({ onClose }) {
     }, 16);
     return () => clearInterval(id);
   }, [total, chunk]);
-
-  // Follow the caret: keep the newest typed line in view, like paper feeding out.
-  useEffect(() => {
-    if (scRef.current && !done) scRef.current.scrollTop = scRef.current.scrollHeight;
-  }, [typed, done]);
 
   const HEAD = { fontWeight: 700, color: color.greenDark, letterSpacing: '.12em', marginTop: 18, borderTop: `1px dashed ${color.faint}`, paddingTop: 12 };
 
@@ -191,11 +185,9 @@ export default function AboutModal({ onClose }) {
           >
             <div style={{ textAlign: 'center', fontWeight: 700, letterSpacing: '.2em', color: color.greenDark }}>LIMEPACK</div>
             <div style={{ borderTop: `1px dashed ${color.faint}`, margin: '10px 0 14px' }} />
-            {/* the live-typed body, in its own scroll area so it follows the caret */}
-            <div ref={scRef} style={{ maxHeight: '58vh', overflowY: 'auto' }}>
-              {items.map(renderBlock)}
-              {!done && <div style={{ textAlign: 'center', color: color.faint, fontSize: text.xs, marginTop: 18 }}>· click to skip ·</div>}
-            </div>
+            {/* The paper simply grows as it types — the reader stays at the top. */}
+            {items.map(renderBlock)}
+            {!done && <div style={{ textAlign: 'center', color: color.faint, fontSize: text.xs, marginTop: 18 }}>· click to skip ·</div>}
           </div>
         </div>
       </div>
