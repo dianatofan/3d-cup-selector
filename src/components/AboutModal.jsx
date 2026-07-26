@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { color, font, text } from '../theme.js';
 
 const REPO = 'https://github.com/dianatofan/3d-cup-selector';
 
-// Same torn-paper edge as the receipt.
 const ZIGZAG = 'polygon(0 0,100% 0,100% calc(100% - 8px),96% 100%,92% calc(100% - 8px),88% 100%,84% calc(100% - 8px),80% 100%,76% calc(100% - 8px),72% 100%,68% calc(100% - 8px),64% 100%,60% calc(100% - 8px),56% 100%,52% calc(100% - 8px),48% 100%,44% calc(100% - 8px),40% 100%,36% calc(100% - 8px),32% 100%,28% calc(100% - 8px),24% 100%,20% calc(100% - 8px),16% 100%,12% calc(100% - 8px),8% 100%,4% calc(100% - 8px),0 100%)';
 
-// Full case-study, printed onto the receipt paper. Scroll the receipt to read it all.
-// Block types: title | sub | links | h (section) | p | lead (bold+rest) | li (bullet) | foot
+// Full case-study, typed live onto the paper.
+// Types: title | sub | p | h (section) | lead (bold b + rest v) | li (bullet) | source | foot
 const BLOCKS = [
   { t: 'title', v: 'LIMEPACK TAKE-HOME' },
-  { t: 'sub', v: 'Plastic Cups Category' },
-  { t: 'links' },
+  { t: 'sub', v: 'Plastic Cups Category · prototype notes' },
+  { t: 'p', v: "Prototype: you're looking at it." },
+  { t: 'source', pre: 'Source: ', url: 'github.com/dianatofan/3d-cup-selector', href: REPO },
 
   { t: 'h', v: '1 · PROBLEMS IDENTIFIED' },
   { t: 'lead', b: 'Paradox of choice. ', v: 'Customers are shown several similar products, sizes, materials, print options and quantities. Without enough guidance, this flexibility becomes overwhelming.' },
@@ -96,35 +96,66 @@ const BLOCKS = [
   { t: 'foot', v: 'A take-home prototype · not a production store.' },
 ];
 
-export default function AboutModal({ onClose }) {
-  const anim = (i) => ({ animation: 'lp-type .45s steps(26,end) both', animationDelay: `${0.3 + i * 0.05}s` });
+const Caret = () => <span style={{ display: 'inline-block', width: '0.55ch', height: '1.05em', background: color.ink, verticalAlign: '-0.15em', marginLeft: 1, animation: 'lp-caret 1s steps(1) infinite' }} />;
 
-  const render = (n, i) => {
-    switch (n.t) {
-      case 'title':
-        return <div key={i} style={{ ...anim(i), textAlign: 'center', fontWeight: 700, letterSpacing: '.2em', fontSize: text.title }}>{n.v}</div>;
-      case 'sub':
-        return <div key={i} style={{ ...anim(i), textAlign: 'center', color: color.gray, marginTop: 2 }}>{n.v}</div>;
-      case 'links':
-        return (
-          <div key={i} style={{ ...anim(i), textAlign: 'center', margin: '10px 0 4px', fontSize: text.sm }}>
-            <span style={{ color: color.gray }}>Prototype:</span> <span style={{ color: color.greenDark }}>you're looking at it</span>
-            <br />
-            <span style={{ color: color.gray }}>Source:</span>{' '}
-            <a href={REPO} target="_blank" rel="noreferrer" style={{ color: color.greenDark, textDecoration: 'underline' }}>github.com/dianatofan/3d-cup-selector</a>
-          </div>
-        );
-      case 'h':
-        return <div key={i} style={{ ...anim(i), fontWeight: 700, color: color.greenDark, letterSpacing: '.12em', marginTop: 18, borderTop: `1px dashed ${color.faint}`, paddingTop: 12 }}>{n.v}</div>;
-      case 'lead':
-        return <div key={i} style={{ ...anim(i), color: color.muted, marginTop: 8 }}><b style={{ color: color.ink }}>{n.b}</b>{n.v}</div>;
-      case 'li':
-        return <div key={i} style={{ ...anim(i), color: color.muted, marginTop: 3, paddingLeft: 14, textIndent: -14 }}>• {n.v}</div>;
-      case 'foot':
-        return <div key={i} style={{ ...anim(i), textAlign: 'center', color: color.gray, marginTop: 20, fontSize: text.sm }}>{n.v}</div>;
-      default:
-        return <div key={i} style={{ ...anim(i), color: color.muted, marginTop: 8 }}>{n.v}</div>;
+export default function AboutModal({ onClose }) {
+  // Precompute each block's plain text + its start offset in the global stream.
+  const { items, total } = useMemo(() => {
+    let acc = 0;
+    const its = BLOCKS.map((b) => {
+      const txt = b.t === 'lead' ? b.b + b.v : b.t === 'source' ? b.pre + b.url : b.v;
+      const start = acc;
+      acc += txt.length + 2; // small pause between blocks
+      return { ...b, txt, start };
+    });
+    return { items: its, total: acc };
+  }, []);
+
+  const [typed, setTyped] = useState(0);
+  const done = typed >= total;
+  const chunk = Math.max(2, Math.round(total / 480)); // ~8s total regardless of length
+  const scRef = useRef(null);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTyped((t) => (t >= total ? t : Math.min(total, t + chunk)));
+    }, 16);
+    return () => clearInterval(id);
+  }, [total, chunk]);
+
+  // Follow the caret: keep the newest typed line in view, like paper feeding out.
+  useEffect(() => {
+    if (scRef.current && !done) scRef.current.scrollTop = scRef.current.scrollHeight;
+  }, [typed, done]);
+
+  const HEAD = { fontWeight: 700, color: color.greenDark, letterSpacing: '.12em', marginTop: 18, borderTop: `1px dashed ${color.faint}`, paddingTop: 12 };
+
+  const renderBlock = (item, i) => {
+    const rev = Math.max(0, Math.min(item.txt.length, typed - item.start));
+    if (rev <= 0) return null; // not yet reached — keeps the paper filling top-down
+    const active = !done && typed < item.start + item.txt.length;
+    const caret = active ? <Caret /> : null;
+
+    if (item.t === 'title') return <div key={i} style={{ textAlign: 'center', fontWeight: 700, letterSpacing: '.2em', fontSize: text.title }}>{item.txt.slice(0, rev)}{caret}</div>;
+    if (item.t === 'sub') return <div key={i} style={{ textAlign: 'center', color: color.gray, marginTop: 2 }}>{item.txt.slice(0, rev)}{caret}</div>;
+    if (item.t === 'h') return <div key={i} style={HEAD}>{item.txt.slice(0, rev)}{caret}</div>;
+    if (item.t === 'li') return <div key={i} style={{ color: color.muted, marginTop: 3, paddingLeft: 16, textIndent: -16 }}>• {item.txt.slice(0, rev)}{caret}</div>;
+    if (item.t === 'foot') return <div key={i} style={{ textAlign: 'center', color: color.gray, marginTop: 20, fontSize: text.sm }}>{item.txt.slice(0, rev)}{caret}</div>;
+    if (item.t === 'lead') {
+      const bl = item.b.length;
+      return <div key={i} style={{ color: color.muted, marginTop: 8 }}><b style={{ color: color.ink }}>{item.txt.slice(0, Math.min(rev, bl))}</b>{rev > bl ? item.txt.slice(bl, rev) : ''}{caret}</div>;
     }
+    if (item.t === 'source') {
+      const pl = item.pre.length;
+      return (
+        <div key={i} style={{ color: color.muted, marginTop: 2 }}>
+          {item.txt.slice(0, Math.min(rev, pl))}
+          {rev > pl && <a href={item.href} target="_blank" rel="noreferrer" style={{ color: color.greenDark, textDecoration: 'underline' }}>{item.url.slice(0, rev - pl)}</a>}
+          {caret}
+        </div>
+      );
+    }
+    return <div key={i} style={{ color: color.muted, marginTop: 8 }}>{item.txt.slice(0, rev)}{caret}</div>;
   };
 
   return (
@@ -132,11 +163,11 @@ export default function AboutModal({ onClose }) {
       onClick={onClose}
       style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(19,19,19,.55)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 'clamp(16px,5vh,56px) 16px', overflow: 'auto', animation: 'lp-fadeIn .25s ease both' }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ position: 'relative', width: '100%', maxWidth: 620, animation: 'lp-modalIn .5s cubic-bezier(.2,.8,.2,1) both' }}>
+      <div style={{ position: 'relative', width: '100%', maxWidth: 820, animation: 'lp-modalIn .45s cubic-bezier(.2,.8,.2,1) both' }}>
         <button
-          onClick={onClose}
+          onClick={(e) => { e.stopPropagation(); onClose(); }}
           aria-label="Close"
-          style={{ position: 'sticky', top: 0, float: 'right', zIndex: 6, width: 34, height: 34, borderRadius: '50%', background: color.ink, color: color.white, border: 'none', fontSize: 15, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,.35)', marginRight: -6 }}
+          style={{ position: 'absolute', top: -12, right: -6, zIndex: 6, width: 34, height: 34, borderRadius: '50%', background: color.ink, color: color.white, border: 'none', fontSize: 15, cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,.35)' }}
         >
           ✕
         </button>
@@ -147,19 +178,24 @@ export default function AboutModal({ onClose }) {
         </div>
 
         {/* paper */}
-        <div style={{ overflow: 'hidden', position: 'relative', zIndex: 3, margin: '-13px 0 0', padding: '0 4px' }}>
+        <div style={{ position: 'relative', zIndex: 3, margin: '-13px 0 0', padding: '0 4px' }}>
           <div
+            onClick={(e) => { e.stopPropagation(); if (!done) setTyped(total); }}
             style={{
               fontFamily: font.mono, fontSize: text.base, color: color.ink, lineHeight: 1.7,
               background: 'repeating-linear-gradient(0deg,rgba(19,19,19,.035) 0,rgba(19,19,19,.035) 1px,transparent 1px,transparent 4px),repeating-linear-gradient(90deg,rgba(19,19,19,.015) 0,rgba(19,19,19,.015) 2px,transparent 2px,transparent 7px),linear-gradient(175deg,#fdfcf6,#f0eee1)',
-              padding: '28px 26px 40px', borderRadius: '0 0 2px 2px',
+              padding: '30px clamp(26px,5vw,54px) 40px', borderRadius: '0 0 2px 2px',
               boxShadow: '0 26px 54px rgba(0,0,0,.35),0 6px 14px rgba(0,0,0,.22),inset 0 14px 12px -12px rgba(0,0,0,.28)',
-              clipPath: ZIGZAG,
+              clipPath: ZIGZAG, cursor: done ? 'default' : 'pointer',
             }}
           >
             <div style={{ textAlign: 'center', fontWeight: 700, letterSpacing: '.2em', color: color.greenDark }}>LIMEPACK</div>
             <div style={{ borderTop: `1px dashed ${color.faint}`, margin: '10px 0 14px' }} />
-            {BLOCKS.map(render)}
+            {/* the live-typed body, in its own scroll area so it follows the caret */}
+            <div ref={scRef} style={{ maxHeight: '58vh', overflowY: 'auto' }}>
+              {items.map(renderBlock)}
+              {!done && <div style={{ textAlign: 'center', color: color.faint, fontSize: text.xs, marginTop: 18 }}>· click to skip ·</div>}
+            </div>
           </div>
         </div>
       </div>

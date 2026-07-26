@@ -21,3 +21,4 @@ input { outline: none; }
 @keyframes lp-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes lp-modalIn { 0% { opacity: 0; transform: translateY(-24px) scale(.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes lp-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes lp-caret { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
