@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { color, font, text } from '../theme.js';
+import LayoutWireframe from './LayoutWireframe.jsx';
 
 const REPO = 'https://github.com/dianatofan/3d-cup-selector';
 
@@ -53,6 +54,7 @@ const BLOCKS = [
   { t: 'li', v: 'Delivery estimate' },
   { t: 'li', v: 'Main call to action' },
   { t: 'p', v: 'A deliberate trade-off: mobile users lose some visual detail, but the experience becomes faster and easier to use.' },
+  { t: 'wireframe' },
   { t: 'p', v: 'With more time I would create a dedicated tablet design — a two-column layout combining the finder and 3D cup with a compact order summary.' },
 
   { t: 'h', v: '6 · TRUST & REASSURANCE' },
@@ -103,9 +105,9 @@ export default function AboutModal({ onClose }) {
   const { items, total } = useMemo(() => {
     let acc = 0;
     const its = BLOCKS.map((b) => {
-      const txt = b.t === 'lead' ? b.b + b.v : b.t === 'source' ? b.pre + b.url : b.v;
+      const txt = b.t === 'lead' ? b.b + b.v : b.t === 'source' ? b.pre + b.url : b.t === 'wireframe' ? '' : b.v;
       const start = acc;
-      acc += txt.length + 2; // small pause between blocks
+      acc += b.t === 'wireframe' ? 40 : txt.length + 2; // wireframe holds a short pause while it draws in
       return { ...b, txt, start };
     });
     return { items: its, total: acc };
@@ -125,6 +127,10 @@ export default function AboutModal({ onClose }) {
   const HEAD = { fontWeight: 700, color: color.greenDark, letterSpacing: '.12em', marginTop: 18, borderTop: `1px dashed ${color.faint}`, paddingTop: 12 };
 
   const renderBlock = (item, i) => {
+    if (item.t === 'wireframe') {
+      if (typed < item.start) return null;
+      return <div key={i} style={{ margin: '16px 0 6px', animation: 'lp-cellIn .5s ease both' }}><LayoutWireframe /></div>;
+    }
     const rev = Math.max(0, Math.min(item.txt.length, typed - item.start));
     if (rev <= 0) return null; // not yet reached — keeps the paper filling top-down
     const active = !done && typed < item.start + item.txt.length;
