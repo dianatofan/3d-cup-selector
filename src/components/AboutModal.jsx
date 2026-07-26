@@ -132,7 +132,7 @@ export default function AboutModal({ onClose }) {
       onClick={onClose}
       style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(19,19,19,.55)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 'clamp(16px,5vh,56px) 16px', overflow: 'auto', animation: 'lp-fadeIn .25s ease both' }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ position: 'relative', width: '100%', maxWidth: 460, animation: 'lp-modalIn .5s cubic-bezier(.2,.8,.2,1) both' }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ position: 'relative', width: '100%', maxWidth: 620, animation: 'lp-modalIn .5s cubic-bezier(.2,.8,.2,1) both' }}>
         <button
           onClick={onClose}
           aria-label="Close"

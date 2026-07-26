@@ -13,7 +13,7 @@ export default function Header({ onAbout }) {
   const isMobile = useIsMobile();
   return (
     <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: `14px ${gutter}`, borderBottom: `1px solid ${color.borderLight}`, background: color.bg }}>
-      <img src="/limepack-logo.png" alt="LimePack" style={{ height: 'clamp(24px,4vw,28px)', display: 'block' }} />
+      <img src={`${import.meta.env.BASE_URL}limepack-logo.png`} alt="LimePack" style={{ height: 'clamp(24px,4vw,28px)', display: 'block' }} />
       {isMobile ? (
         <button
           onClick={onAbout}
