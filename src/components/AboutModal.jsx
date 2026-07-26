@@ -35,7 +35,7 @@ const BLOCKS = [
   { t: 'h', v: '5 · RESPONSIVE' },
   { t: 'p', v: 'Desktop keeps the full three columns. Below 1200px, one column serves phone and tablet: a sticky cup, the options, a price summary and stats, dropping the printer animation for speed.' },
   { t: 'wireframe' },
-  { t: 'p', v: 'A dedicated two-column tablet view would be the natural next step.' },
+  { t: 'lead', b: 'Trade-off: ', v: "there's no dedicated tablet view yet, so tablet currently uses the mobile layout. A two-column tablet view is the natural next step." },
 
   { t: 'h', v: '6 · TRUST' },
   { t: 'p', v: 'Reassurance sits next to the recommendation and price:' },
