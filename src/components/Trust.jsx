@@ -94,7 +94,7 @@ export default function Trust() {
         {askOpen && (
           sent ? (
             <div style={{ marginTop: 4, fontSize: 13.5, color: color.greenDark, fontWeight: 600 }}>
-              ✓ Thanks — a specialist will reply within the hour.
+              ✓ Thanks! A specialist will reply within the hour.
               <div
                 role="button"
                 onClick={() => { setSent(false); setAsk({ email: '', question: '' }); }}

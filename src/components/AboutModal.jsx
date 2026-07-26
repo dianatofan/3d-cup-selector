@@ -15,25 +15,25 @@ const BLOCKS = [
   { t: 'source', pre: 'Source: ', url: 'github.com/dianatofan/3d-cup-selector', href: REPO },
 
   { t: 'h', v: '1 · PROBLEMS' },
-  { t: 'lead', b: 'Paradox of choice. ', v: 'Many similar products, sizes, materials and quantities — flexibility without guidance overwhelms.' },
-  { t: 'lead', b: 'Product-driven journey. ', v: "Customers must learn the range before deciding, instead of starting from what they know — quantity, deadline, size, use." },
+  { t: 'lead', b: 'Paradox of choice. ', v: 'Many similar products, sizes, materials and quantities. Flexibility without guidance overwhelms.' },
+  { t: 'lead', b: 'Product-driven journey. ', v: "Customers must learn the range before deciding, instead of starting from what they know: quantity, deadline, size, use." },
   { t: 'lead', b: 'Best option unclear. ', v: "The page lists what's available but never recommends the right cup for the need and budget." },
   { t: 'lead', b: 'No instant preview. ', v: 'Uploaded artwork only appears on the cup once the design team returns a proof.' },
 
   { t: 'h', v: '2 · CONCEPT' },
-  { t: 'p', v: 'The catalogue becomes an interactive product finder: pick type, deadline, size, variant and quantity, and it recommends the best cup — price, total and delivery update live.' },
+  { t: 'p', v: 'The catalogue becomes an interactive product finder: pick type, deadline, size, variant and quantity, and it recommends the best cup; price, total and delivery update live.' },
   { t: 'p', v: 'Compare the alternatives or override the pick: guidance without removing control.' },
 
   { t: 'h', v: '3 · DESKTOP' },
-  { t: 'p', v: 'Three columns — left: choices + quantity; centre: 3D cup + recommendation; right: live receipt.' },
-  { t: 'p', v: 'The cup rotates and changes size/material, and previews your artwork instantly — an early look before the team prepares the final proof.' },
+  { t: 'p', v: 'Three columns. Left: choices + quantity; centre: 3D cup + recommendation; right: live receipt.' },
+  { t: 'p', v: 'The cup rotates and changes size/material, and previews your artwork instantly, an early look before the team prepares the final proof.' },
 
   { t: 'h', v: '4 · LIVE PRINTER' },
   { t: 'p', v: 'The order summary behaves like a label printer: on each change the old value is scratched out with a zigzag and the new one is typed in.' },
   { t: 'p', v: "Every choice's effect is obvious, and it feels like a real, personalised order being produced." },
 
   { t: 'h', v: '5 · RESPONSIVE' },
-  { t: 'p', v: 'Desktop keeps the full three columns. Below 1200px, one column serves phone and tablet — a sticky cup, the options, a price summary and stats — dropping the printer animation for speed.' },
+  { t: 'p', v: 'Desktop keeps the full three columns. Below 1200px, one column serves phone and tablet: a sticky cup, the options, a price summary and stats, dropping the printer animation for speed.' },
   { t: 'wireframe' },
   { t: 'p', v: 'A dedicated two-column tablet view would be the natural next step.' },
 
@@ -46,11 +46,11 @@ const BLOCKS = [
 
   { t: 'h', v: '7 · SCALABILITY' },
   { t: 'p', v: 'The finder is driven by product data (min quantity, price, delivery, print), so the same structure fits paper cups, napkins, boxes and packaging.' },
-  { t: 'p', v: 'Reusable pieces: selectors, quantity controls, recommendation logic, comparison, summaries and 3D previews — with currency, VAT and language adapting per market.' },
+  { t: 'p', v: 'Reusable pieces: selectors, quantity controls, recommendation logic, comparison, summaries and 3D previews, with currency, VAT and language adapting per market.' },
 
   { t: 'h', v: '8 · BUILD & CLAUDE' },
-  { t: 'p', v: 'Built with Claude as a tool — I directed the concept, interactions, component structure and responsive behaviour.' },
-  { t: 'p', v: 'Reusable components, shared design tokens, data-driven pricing, minimal hardcoded values. HTML, CSS, JS and Three.js — no backend.' },
+  { t: 'p', v: 'Built with Claude as a tool. I directed the concept, interactions, component structure and responsive behaviour.' },
+  { t: 'p', v: 'Reusable components, shared design tokens, data-driven pricing, minimal hardcoded values. HTML, CSS, JS and Three.js. No backend.' },
 
   { t: 'h', v: "9 · WHAT'S NEXT" },
   { t: 'lead', b: 'Analytics. ', v: 'Track recommendations, visits, orders and enquiries; heatmaps to find where customers hesitate.' },

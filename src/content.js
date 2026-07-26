@@ -13,7 +13,7 @@ export const REVIEWS = [
   { text: '“The 3D proof made it easy to get sign-off from our brand team. Reordering took two minutes.”', who: 'Marco, Tap+Brew' },
   { text: '“We needed 10,000 cups for a festival on short notice. They delivered a week early.”', who: 'Sofie, Five Senses' },
   { text: '“Colours matched our brand guide exactly. The kraft reusables were a hit at our launch.”', who: 'Jonas, Meat Locker' },
-  { text: '“Ordering online was painless and the price was clear up front — no hidden setup fees.”', who: 'Amelia, Ballucci' },
+  { text: '“Ordering online was painless and the price was clear up front, no hidden setup fees.”', who: 'Amelia, Ballucci' },
   { text: '“Great advice on sizing over the phone. Ended up with the perfect cup for our cold brew.”', who: 'Priya, SHOT Coffee' },
 ];
 
